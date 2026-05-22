@@ -1,25 +1,28 @@
 # markdown-live
 
-A minimal single-page Markdown previewer built with Vite and vanilla TypeScript.
+Minimal browser-based Markdown previewer built with Vite and vanilla TypeScript.
 
-Drop a `.md` or `.markdown` file anywhere on the page and the app renders it directly in the browser. Dropping another Markdown file replaces the current preview immediately.
+Drop a Markdown file anywhere on the page and `markdown-live` renders it instantly. Drop another file to replace the current preview.
+
+Live: [victorcastro.github.io/markdown-live](https://victorcastro.github.io/markdown-live)
+
+## Overview
+
+`markdown-live` is a single-page static web app. It runs entirely in the browser, with no backend, server-side rendering, routing, or runtime Node dependency.
+
+The interface is intentionally minimal: a full-screen drop area, dark mode, developer-oriented typography, and a polished Markdown reading surface.
 
 ## Features
 
-- Full-page drag and drop area.
+- Full-page drag and drop interaction.
 - Supports `.md` and `.markdown` files.
-- Clear empty, dragging, loaded, and error states.
-- Markdown rendering with headings, lists, links, code blocks, blockquotes, and tables.
-- Client-side only: no backend, SSR, or runtime Node dependency.
-- Static `dist` output ready for GitHub Pages.
+- Replaces the rendered document immediately when a new file is dropped.
+- Clear UI states for ready, dragging, loaded, and invalid file.
+- Styled Markdown output for headings, lists, links, code blocks, blockquotes, images, and tables.
+- Sanitized HTML output before rendering.
+- Static production build in `dist`, ready for GitHub Pages.
 
-## Tech Stack
-
-- [Vite](https://vite.dev/) with vanilla TypeScript.
-- [marked](https://marked.js.org/) for Markdown parsing.
-- [DOMPurify](https://github.com/cure53/DOMPurify) for sanitized HTML output.
-
-## Getting Started
+## Local Development
 
 Install dependencies:
 
@@ -39,35 +42,15 @@ Build for production:
 npm run build
 ```
 
-Preview the production build locally:
+Preview the production build:
 
 ```bash
 npm run preview
 ```
 
-## GitHub Pages
+## Tech Stack
 
-The project uses `base: './'` in `vite.config.ts`, so the generated files work when served from a GitHub Pages subpath.
-
-To publish manually:
-
-```bash
-npm run build
-```
-
-Then deploy the contents of `dist`.
-
-## Project Structure
-
-```text
-markdown-live/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── main.ts
-│   └── style.css
-├── index.html
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
-```
+- [Vite](https://vite.dev/) with vanilla TypeScript.
+- [marked](https://marked.js.org/) for Markdown parsing.
+- [DOMPurify](https://github.com/cure53/DOMPurify) for HTML sanitization.
+- GitHub Actions for CI, GitHub Pages deploy, and release tagging.
