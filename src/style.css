@@ -110,10 +110,16 @@ a {
   height: 17px;
 }
 
-.source-link span {
+.source-label {
   font-size: 0.78rem;
   font-weight: 650;
   letter-spacing: 0.02em;
+}
+
+.source-version {
+  color: rgba(244, 240, 232, 0.38);
+  font-size: 0.72rem;
+  font-weight: 560;
 }
 
 .drop-surface {
@@ -364,7 +370,7 @@ h1 {
     right: 22px;
   }
 
-  .source-link span {
+  .source-label {
     display: none;
   }
 
