@@ -121,7 +121,7 @@ a {
   z-index: 1;
   display: grid;
   gap: clamp(24px, 4vw, 52px);
-  width: min(100%, 1040px);
+  width: min(100%, 1280px);
   min-height: 100svh;
   padding: clamp(88px, 10vw, 132px) clamp(18px, 4vw, 48px) clamp(30px, 5vw, 64px);
   margin: 0 auto;

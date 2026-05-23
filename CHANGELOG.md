@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Increased the Markdown preview container maximum width from 1040px to 1280px.
+
 ## 1.0 - 2026-05-22
 
 Initial release of `markdown-live`.
