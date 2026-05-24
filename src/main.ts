@@ -5,7 +5,7 @@ import './style.css'
 
 type ViewState = 'empty' | 'dragging' | 'loaded' | 'error'
 
-const sourceCodeUrl = 'https://github.com/victorcastro/markdown-live'
+const sourceCodeUrl = 'https://github.com/victorcastro/markdown-preview'
 const appVersion = __APP_VERSION__
 
 marked.use({

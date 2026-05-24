@@ -2,12 +2,24 @@
 
 ## Unreleased
 
+## 1.2 - 2026-05-24
+
+### Added
+
+- Open Graph and Twitter card metadata for richer link previews when sharing the public site.
+- `robots.txt` and `sitemap.xml` in `public/` for basic search engine discovery.
+- A dedicated PNG social preview asset for public sharing cards.
+
+### Changed
+
+- Expanded the document metadata in `index.html` with canonical, robots, keywords, and theme-color tags.
+
 ## 1.1 - 2026-05-24
 
 ### Added
 
 - Stable heading ids for rendered Markdown headings so in-document anchor links work reliably.
-- A comprehensive Markdown playground fixture in [examples/playground-complex.md](/Users/vcastro/Workspace/VictorCastro/Projects/markdown-live/examples/playground-complex.md) for parser and layout testing.
+- A comprehensive Markdown playground fixture in [examples/playground-complex.md](/Users/vcastro/Workspace/VictorCastro/Projects/markdown-preview/examples/playground-complex.md) for parser and layout testing.
 
 ### Changed
 
@@ -18,7 +30,7 @@
 
 ## 1.0 - 2026-05-22
 
-Initial release of `markdown-live`.
+Initial release of `markdown-preview`.
 
 ### Added
 

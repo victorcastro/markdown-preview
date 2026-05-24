@@ -1,14 +1,14 @@
-# markdown-live
+# markdown-preview
 
 Minimal browser-based Markdown previewer built with Vite and vanilla TypeScript.
 
-Drop a Markdown file anywhere on the page and `markdown-live` renders it instantly. Drop another file to replace the current preview.
+Drop a Markdown file anywhere on the page and `markdown-preview` renders it instantly. Drop another file to replace the current preview.
 
-Live: [victorcastro.github.io/markdown-live](https://victorcastro.github.io/markdown-live)
+Live: [victorcastro.github.io/markdown-preview](https://victorcastro.github.io/markdown-preview)
 
 ## Overview
 
-`markdown-live` is a single-page static web app. It runs entirely in the browser, with no backend, server-side rendering, routing, or runtime Node dependency.
+`markdown-preview` is a single-page static web app. It runs entirely in the browser, with no backend, server-side rendering, routing, or runtime Node dependency.
 
 The interface is intentionally minimal: a full-screen drop area, dark mode, developer-oriented typography, and a polished Markdown reading surface.
 
