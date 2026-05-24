@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { JSDOM } from 'jsdom'
-import { configureRenderedLinks, isMarkdownFile } from './markdown'
+import { configureRenderedLinks, isMarkdownFile, looksLikeMarkdown } from './markdown'
 
 describe('isMarkdownFile', () => {
   it('accepts .md files case-insensitively', () => {
@@ -49,5 +49,25 @@ describe('configureRenderedLinks', () => {
 
     expect(link.getAttribute('target')).toBeNull()
     expect(link.getAttribute('rel')).toBeNull()
+  })
+})
+
+describe('looksLikeMarkdown', () => {
+  it('detects common markdown syntax', () => {
+    expect(looksLikeMarkdown('# Title\n\n- item\n- item')).toBe(true)
+    expect(looksLikeMarkdown('```ts\nconsole.log("hi")\n```')).toBe(true)
+    expect(looksLikeMarkdown('[Docs](https://example.com)')).toBe(false)
+  })
+
+  it('accepts long pasted plain text as markdown-compatible content', () => {
+    expect(
+      looksLikeMarkdown(
+        'This is a long pasted snippet of text that does not include explicit markdown tokens but should still be accepted because users may paste prose directly into the preview surface to inspect formatting and layout behavior.'
+      )
+    ).toBe(true)
+  })
+
+  it('rejects short plain text that does not look like markdown', () => {
+    expect(looksLikeMarkdown('hello world')).toBe(false)
   })
 })

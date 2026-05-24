@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0 - 2026-05-24
+
+### Added
+
+- Clipboard paste support for Markdown content via `CMD+V` / `paste`, including validation of pasted text before rendering.
+- Session-only in-memory document history for loaded and pasted Markdown snapshots.
+- Keyboard undo/redo for document snapshots with `CMD+Z` and `CMD+Shift+Z`.
+- A subtle `Clear` action near the document metadata to reset the current preview while keeping the state recoverable through undo.
+
+### Changed
+
+- Improved clipboard feedback so invalid pasted content is highlighted as an error without discarding the currently loaded document.
+- Smoothed drag-and-drop behavior when a document is already loaded, avoiding layout shifts while re-entering the dragging state.
+- Refined the document-header action area so metadata and global actions feel more integrated and less intrusive.
+
 ## 1.5 - 2026-05-24
 
 ### Changed
