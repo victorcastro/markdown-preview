@@ -202,6 +202,19 @@ h1 {
   font-size: clamp(0.9rem, 1.7vw, 1.05rem);
 }
 
+.document-preview[hidden] {
+  display: none;
+}
+
+.document-header {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  justify-content: space-between;
+  padding: 0 clamp(8px, 1vw, 12px) 18px;
+  margin-bottom: 18px;
+}
+
 .document {
   padding: clamp(22px, 4vw, 46px);
   background: var(--surface-strong);
@@ -211,20 +224,6 @@ h1 {
   backdrop-filter: blur(18px);
 }
 
-.document[hidden] {
-  display: none;
-}
-
-.document-header {
-  display: flex;
-  gap: 20px;
-  align-items: end;
-  justify-content: space-between;
-  padding-bottom: 22px;
-  margin-bottom: 28px;
-  border-bottom: 1px solid var(--line);
-}
-
 .document-header .eyebrow {
   margin-bottom: 8px;
 }
@@ -232,9 +231,10 @@ h1 {
 .document-header h2 {
   margin: 0;
   overflow-wrap: anywhere;
-  font-size: clamp(1.55rem, 4vw, 2.5rem);
-  font-weight: 760;
-  letter-spacing: -0.06em;
+  color: rgba(244, 240, 232, 0.88);
+  font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+  font-weight: 680;
+  letter-spacing: -0.035em;
 }
 
 .document-header p:last-child {
@@ -380,6 +380,7 @@ h1 {
 
   .document-header {
     display: block;
+    padding-inline: 0;
   }
 
   .document-header p:last-child {

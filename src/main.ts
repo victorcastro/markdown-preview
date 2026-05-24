@@ -29,7 +29,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <p class="lede" data-message>.md or .markdown</p>
       </div>
 
-      <article class="document" hidden>
+      <section class="document-preview" hidden>
         <header class="document-header">
           <div>
             <p class="eyebrow">Loaded file</p>
@@ -37,8 +37,10 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           </div>
           <p data-file-meta></p>
         </header>
-        <div class="markdown-body" data-output></div>
-      </article>
+        <article class="document">
+          <div class="markdown-body" data-output></div>
+        </article>
+      </section>
     </section>
   </main>
 `
@@ -47,7 +49,7 @@ const shell = document.querySelector<HTMLElement>('.shell')!
 const statusLabel = document.querySelector<HTMLElement>('[data-status]')!
 const message = document.querySelector<HTMLElement>('[data-message]')!
 const output = document.querySelector<HTMLElement>('[data-output]')!
-const documentView = document.querySelector<HTMLElement>('.document')!
+const documentView = document.querySelector<HTMLElement>('.document-preview')!
 const fileName = document.querySelector<HTMLElement>('[data-file-name]')!
 const fileMeta = document.querySelector<HTMLElement>('[data-file-meta]')!
 
@@ -78,6 +80,43 @@ function formatBytes(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`
 }
 
+function slugifyHeading(text: string) {
+  return text
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+function assignHeadingIds(container: HTMLElement) {
+  const seen = new Map<string, number>()
+
+  container.querySelectorAll<HTMLHeadingElement>('h1, h2, h3, h4, h5, h6').forEach((heading) => {
+    const baseSlug = slugifyHeading(heading.textContent ?? '') || 'section'
+    const seenCount = seen.get(baseSlug) ?? 0
+    const slug = seenCount === 0 ? baseSlug : `${baseSlug}-${seenCount + 1}`
+
+    seen.set(baseSlug, seenCount + 1)
+    heading.id = slug
+  })
+}
+
+function configureRenderedLinks(container: HTMLElement) {
+  container.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
+    if (link.getAttribute('href')?.startsWith('#')) {
+      link.removeAttribute('target')
+      link.removeAttribute('rel')
+      return
+    }
+
+    link.target = '_blank'
+    link.rel = 'noreferrer noopener'
+  })
+}
+
 async function renderFile(file: File) {
   if (!isMarkdownFile(file)) {
     documentView.hidden = true
@@ -91,6 +130,8 @@ async function renderFile(file: File) {
     const html = await marked.parse(markdown)
 
     output.innerHTML = DOMPurify.sanitize(html)
+    assignHeadingIds(output)
+    configureRenderedLinks(output)
     fileName.textContent = file.name
     fileMeta.textContent = `${formatBytes(file.size)} · Last modified ${new Intl.DateTimeFormat(undefined, {
       dateStyle: 'medium',
