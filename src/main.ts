@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
 import MarkdownIt from 'markdown-it'
-import { configureRenderedLinks, isMarkdownFile } from './lib/markdown'
+import { configureRenderedLinks, isMarkdownFile, looksLikeMarkdown } from './lib/markdown'
 import './style.css'
 
 type ViewState = 'empty' | 'dragging' | 'loaded' | 'error'
@@ -237,19 +237,12 @@ async function renderFile(file: File) {
 
   try {
     const markdown = await file.text()
-    const html = markdownParser.render(markdown)
-
-    output.innerHTML = DOMPurify.sanitize(html)
-    assignHeadingIds(output)
-    decorateCodeBlocks(output)
-    configureRenderedLinks(output)
+    renderMarkdown(markdown)
     fileName.textContent = file.name
     fileMeta.textContent = `${formatBytes(file.size)} · Last modified ${new Intl.DateTimeFormat(undefined, {
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(file.lastModified)}`
-    documentView.hidden = false
-    updateBackToTopVisibility()
     setState('loaded', '.md or .markdown')
   } catch {
     documentView.hidden = true
@@ -257,6 +250,17 @@ async function renderFile(file: File) {
     updateBackToTopVisibility()
     setState('error', 'The file could not be read. Try another Markdown file.')
   }
+}
+
+function renderMarkdown(markdown: string) {
+  const html = markdownParser.render(markdown)
+
+  output.innerHTML = DOMPurify.sanitize(html)
+  assignHeadingIds(output)
+  decorateCodeBlocks(output)
+  configureRenderedLinks(output)
+  documentView.hidden = false
+  updateBackToTopVisibility()
 }
 
 function extractFile(event: DragEvent) {
@@ -296,6 +300,23 @@ window.addEventListener('drop', (event) => {
   }
 
   void renderFile(file)
+})
+
+window.addEventListener('paste', (event) => {
+  const clipboardData = event.clipboardData
+  if (!clipboardData) return
+
+  const markdown = clipboardData.getData('text/markdown') || clipboardData.getData('text/plain')
+  if (!looksLikeMarkdown(markdown)) {
+    setState(documentView.hidden ? 'empty' : 'loaded', 'Clipboard content does not look like Markdown.')
+    return
+  }
+
+  event.preventDefault()
+  renderMarkdown(markdown)
+  fileName.textContent = 'Pasted from clipboard'
+  fileMeta.textContent = `${formatBytes(new TextEncoder().encode(markdown).length)} · Pasted just now`
+  setState('loaded', 'Markdown pasted from clipboard')
 })
 
 window.addEventListener('scroll', updateBackToTopVisibility, { passive: true })
