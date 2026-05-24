@@ -137,17 +137,70 @@ function updateBackToTopVisibility() {
   backToTopButton.classList.toggle('is-visible', shouldShow)
 }
 
+function createCopyButton(codeBlock: HTMLElement) {
+  const copyIconMarkup = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M9 9.75A2.25 2.25 0 0 1 11.25 7.5h6A2.25 2.25 0 0 1 19.5 9.75v8.25a2.25 2.25 0 0 1-2.25 2.25h-6A2.25 2.25 0 0 1 9 18Zm2.25-.75a.75.75 0 0 0-.75.75v8.25c0 .414.336.75.75.75h6a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75Zm-4.5 6a.75.75 0 0 1-1.5 0V6A2.25 2.25 0 0 1 7.5 3.75h6.75a.75.75 0 0 1 0 1.5H7.5a.75.75 0 0 0-.75.75Z"
+      />
+    </svg>
+  `
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.className = 'code-copy-button'
+  button.innerHTML = copyIconMarkup
+  button.setAttribute('aria-label', 'Copy code to clipboard')
+
+  let resetLabelTimer: number | undefined
+
+  button.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(codeBlock.textContent ?? '')
+      button.textContent = 'Copied'
+      button.dataset.copied = 'true'
+
+      if (resetLabelTimer) {
+        window.clearTimeout(resetLabelTimer)
+      }
+
+      resetLabelTimer = window.setTimeout(() => {
+        button.innerHTML = copyIconMarkup
+        delete button.dataset.copied
+      }, 1800)
+    } catch {
+      button.textContent = 'Failed'
+      button.dataset.copied = 'false'
+
+      if (resetLabelTimer) {
+        window.clearTimeout(resetLabelTimer)
+      }
+
+      resetLabelTimer = window.setTimeout(() => {
+        button.innerHTML = copyIconMarkup
+        delete button.dataset.copied
+      }, 1800)
+    }
+  })
+
+  return button
+}
+
 function decorateCodeBlocks(container: HTMLElement) {
   container.querySelectorAll<HTMLElement>('pre > code').forEach((codeBlock) => {
     const pre = codeBlock.parentElement
     if (!(pre instanceof HTMLPreElement)) return
 
     const languageClass = Array.from(codeBlock.classList).find((className) => className.startsWith('language-'))
-    if (!languageClass) return
+    if (languageClass) {
+      const language = languageClass.replace('language-', '')
+      if (language) {
+        pre.dataset.language = language
+      }
+    }
 
-    const language = languageClass.replace('language-', '')
-    if (language) {
-      pre.dataset.language = language
+    if (!pre.querySelector('.code-copy-button')) {
+      pre.append(createCopyButton(codeBlock))
     }
   })
 }

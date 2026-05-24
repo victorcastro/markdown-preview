@@ -1,4 +1,4 @@
-# markdown-preview
+# Markdown Preview
 
 Minimal browser-based Markdown previewer built with Vite and vanilla TypeScript.
 

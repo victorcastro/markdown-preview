@@ -1,6 +1,32 @@
 # Changelog
 
-## Unreleased
+## 1.4 - 2026-05-24
+
+### Added
+
+- Copy-to-clipboard control for rendered code blocks, including transient copied and failure states.
+- CI validation to ensure `CHANGELOG.md` contains an entry for the current `package.json` version.
+
+### Changed
+
+- Refined Markdown code block presentation with syntax highlighting, language badges, and a lighter copy affordance.
+- Reduced the visual prominence of the loaded filename in the document header.
+- Switched Markdown display typography to a cleaner title treatment using the local font set already bundled with the app.
+
+## 1.3 - 2026-05-24
+
+### Added
+
+- Local font assets for `Space Grotesk`, `Inter`, and `Manrope`.
+- A dedicated code-heavy playground fixture in [examples/playground-code-heavy.md](/Users/vcastro/Workspace/VictorCastro/Projects/markdown-preview/examples/playground-code-heavy.md) for overflow and code block rendering checks.
+- Syntax highlighting for fenced code blocks using `markdown-it` and `highlight.js`.
+- Language labels on rendered code blocks.
+
+### Changed
+
+- Replaced `marked` with `markdown-it` as the Markdown parser.
+- Improved the Markdown UI typography with separate font roles for headings, UI chrome, body text, and code.
+- Prevented long code blocks from stretching the Markdown container, keeping horizontal scroll inside each code block.
 
 ## 1.2 - 2026-05-24
 
