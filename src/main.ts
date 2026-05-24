@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
+import { configureRenderedLinks, isMarkdownFile } from './lib/markdown'
 import './style.css'
 
 type ViewState = 'empty' | 'dragging' | 'loaded' | 'error'
@@ -80,11 +81,6 @@ function setState(state: ViewState, nextMessage?: string) {
   }
 }
 
-function isMarkdownFile(file: File) {
-  const name = file.name.toLowerCase()
-  return name.endsWith('.md') || name.endsWith('.markdown')
-}
-
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
@@ -112,19 +108,6 @@ function assignHeadingIds(container: HTMLElement) {
 
     seen.set(baseSlug, seenCount + 1)
     heading.id = slug
-  })
-}
-
-function configureRenderedLinks(container: HTMLElement) {
-  container.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
-    if (link.getAttribute('href')?.startsWith('#')) {
-      link.removeAttribute('target')
-      link.removeAttribute('rel')
-      return
-    }
-
-    link.target = '_blank'
-    link.rel = 'noreferrer noopener'
   })
 }
 
