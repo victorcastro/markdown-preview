@@ -13,6 +13,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jsdom": "^21.1.7",
+    "@types/markdown-it": "^14.1.2",
     "eslint": "^10.4.0",
     "globals": "^17.6.0",
     "html-minifier-terser": "^7.2.0",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "dompurify": "^3.4.5",
-    "marked": "^18.0.4"
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.2.0"
   }
 }

@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify'
-import { marked } from 'marked'
+import hljs from 'highlight.js/lib/common'
+import MarkdownIt from 'markdown-it'
 import { configureRenderedLinks, isMarkdownFile } from './lib/markdown'
 import './style.css'
 
@@ -8,9 +9,29 @@ type ViewState = 'empty' | 'dragging' | 'loaded' | 'error'
 const sourceCodeUrl = 'https://github.com/victorcastro/markdown-preview'
 const appVersion = __APP_VERSION__
 
-marked.use({
-  gfm: true,
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+}
+
+const markdownParser = new MarkdownIt({
+  html: true,
   breaks: false,
+  highlight(code, language): string {
+    const normalizedLanguage = language.trim().toLowerCase()
+
+    if (normalizedLanguage && hljs.getLanguage(normalizedLanguage)) {
+      const highlightedCode = hljs.highlight(code, { language: normalizedLanguage, ignoreIllegals: true }).value
+      return `<pre data-language="${normalizedLanguage}"><code class="hljs language-${normalizedLanguage}">${highlightedCode}</code></pre>`
+    }
+
+    const escapedCode = escapeHtml(code)
+    return `<pre><code class="hljs">${escapedCode}</code></pre>`
+  },
 })
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -116,6 +137,21 @@ function updateBackToTopVisibility() {
   backToTopButton.classList.toggle('is-visible', shouldShow)
 }
 
+function decorateCodeBlocks(container: HTMLElement) {
+  container.querySelectorAll<HTMLElement>('pre > code').forEach((codeBlock) => {
+    const pre = codeBlock.parentElement
+    if (!(pre instanceof HTMLPreElement)) return
+
+    const languageClass = Array.from(codeBlock.classList).find((className) => className.startsWith('language-'))
+    if (!languageClass) return
+
+    const language = languageClass.replace('language-', '')
+    if (language) {
+      pre.dataset.language = language
+    }
+  })
+}
+
 async function renderFile(file: File) {
   if (!isMarkdownFile(file)) {
     documentView.hidden = true
@@ -127,10 +163,11 @@ async function renderFile(file: File) {
 
   try {
     const markdown = await file.text()
-    const html = await marked.parse(markdown)
+    const html = markdownParser.render(markdown)
 
     output.innerHTML = DOMPurify.sanitize(html)
     assignHeadingIds(output)
+    decorateCodeBlocks(output)
     configureRenderedLinks(output)
     fileName.textContent = file.name
     fileMeta.textContent = `${formatBytes(file.size)} · Last modified ${new Intl.DateTimeFormat(undefined, {

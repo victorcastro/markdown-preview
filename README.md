@@ -51,6 +51,6 @@ npm run preview
 ## Tech Stack
 
 - [Vite](https://vite.dev/) with vanilla TypeScript.
-- [marked](https://marked.js.org/) for Markdown parsing.
+- [markdown-it](https://github.com/markdown-it/markdown-it) for Markdown parsing.
 - [DOMPurify](https://github.com/cure53/DOMPurify) for HTML sanitization.
 - GitHub Actions for CI, GitHub Pages deploy, and release tagging.
