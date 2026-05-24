@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5 - 2026-05-24
+
+### Changed
+
+- Reworked rendered code blocks so language metadata and copy actions live in a fixed, grouped header outside the horizontal scroll area.
+- Made the code block header more subtle and prevented its height from shifting when the copy state changes.
+
 ## 1.4 - 2026-05-24
 
 ### Added
