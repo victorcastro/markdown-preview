@@ -43,6 +43,12 @@
   --accent-soft: rgba(139, 216, 189, 0.12);
   --danger: #ff8a7a;
   --danger-soft: rgba(255, 138, 122, 0.12);
+  --feedback-success: var(--accent);
+  --feedback-success-soft: var(--accent-soft);
+  --feedback-error: var(--danger);
+  --feedback-error-soft: var(--danger-soft);
+  --feedback-error-ink: #fff4f2;
+  --feedback-muted: rgba(244, 240, 232, 0.42);
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
   --font-sans: 'Inter', 'Segoe UI', sans-serif;
   --font-display: 'Manrope', 'Inter', 'Segoe UI', sans-serif;
@@ -216,6 +222,11 @@ a {
   color: var(--danger);
 }
 
+[data-status][data-tone='error'],
+[data-message][data-tone='error'] {
+  color: var(--feedback-error);
+}
+
 h1,
 h2,
 h3,
@@ -299,6 +310,13 @@ h1 {
   font-weight: 500;
 }
 
+.document-header-actions {
+  display: inline-flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .back-to-top {
   position: fixed;
   right: 30px;
@@ -329,6 +347,19 @@ h1 {
     background 160ms ease;
 }
 
+.clear-document {
+  padding: 0;
+  color: rgba(244, 240, 232, 0.34);
+  font-family: var(--font-ui);
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
 .back-to-top svg {
   width: 14px;
   height: 14px;
@@ -346,6 +377,11 @@ h1 {
   color: rgba(244, 240, 232, 0.9);
   background: rgba(12, 17, 25, 0.68);
   border-color: rgba(244, 240, 232, 0.18);
+}
+
+.clear-document:hover,
+.clear-document:focus-visible {
+  color: rgba(244, 240, 232, 0.72);
 }
 
 .markdown-body {
@@ -455,7 +491,7 @@ h1 {
 }
 
 .markdown-body .code-block-language {
-  color: rgba(244, 240, 232, 0.42);
+  color: var(--feedback-muted);
   font-family: var(--font-ui);
   font-size: 0.7rem;
   font-weight: 800;
@@ -511,13 +547,13 @@ h1 {
 }
 
 .markdown-body .code-copy-button[data-copied='true'] {
-  color: #8bd8bd;
+  color: var(--feedback-success);
   background: transparent;
 }
 
 .markdown-body .code-copy-button[data-copied='false'] {
-  color: #fff4f2;
-  background: rgba(255, 138, 122, 0.18);
+  color: var(--feedback-error-ink);
+  background: var(--feedback-error-soft);
 }
 
 .markdown-body pre code {
@@ -649,7 +685,11 @@ h1 {
     padding-inline: 0;
   }
 
-  .document-header p:last-child {
+  .document-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 10px;
   }
 

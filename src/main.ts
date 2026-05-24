@@ -5,6 +5,11 @@ import { configureRenderedLinks, isMarkdownFile, looksLikeMarkdown } from './lib
 import './style.css'
 
 type ViewState = 'empty' | 'dragging' | 'loaded' | 'error'
+type DocumentSnapshot = {
+  fileName: string
+  fileMeta: string
+  markdown: string
+}
 
 const sourceCodeUrl = 'https://github.com/victorcastro/markdown-preview'
 const appVersion = __APP_VERSION__
@@ -57,7 +62,12 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             <p class="eyebrow">Loaded file</p>
             <h2 data-file-name></h2>
           </div>
-          <p data-file-meta></p>
+          <div class="document-header-actions">
+            <p data-file-meta></p>
+            <button class="clear-document" type="button" aria-label="Clear current markdown" data-clear-document>
+              Clear
+            </button>
+          </div>
         </header>
         <article class="document">
           <div class="markdown-body" data-output></div>
@@ -85,11 +95,16 @@ const documentView = document.querySelector<HTMLElement>('.document-preview')!
 const fileName = document.querySelector<HTMLElement>('[data-file-name]')!
 const fileMeta = document.querySelector<HTMLElement>('[data-file-meta]')!
 const backToTopButton = document.querySelector<HTMLButtonElement>('[data-back-to-top]')!
+const clearDocumentButton = document.querySelector<HTMLButtonElement>('[data-clear-document]')!
 
 let dragDepth = 0
+const documentHistory: Array<DocumentSnapshot | null> = [null]
+let historyIndex = 0
 
 function setState(state: ViewState, nextMessage?: string) {
   shell.dataset.state = state
+  delete statusLabel.dataset.tone
+  delete message.dataset.tone
   statusLabel.textContent = {
     empty: 'Ready',
     dragging: 'Drop',
@@ -100,6 +115,13 @@ function setState(state: ViewState, nextMessage?: string) {
   if (nextMessage) {
     message.textContent = nextMessage
   }
+}
+
+function setTransientErrorMessage(nextMessage: string) {
+  statusLabel.textContent = 'Clipboard error'
+  statusLabel.dataset.tone = 'error'
+  message.textContent = nextMessage
+  message.dataset.tone = 'error'
 }
 
 function formatBytes(bytes: number) {
@@ -135,6 +157,12 @@ function assignHeadingIds(container: HTMLElement) {
 function updateBackToTopVisibility() {
   const shouldShow = !documentView.hidden && window.scrollY > 320
   backToTopButton.classList.toggle('is-visible', shouldShow)
+}
+
+function canCaptureUndoShortcut(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return true
+
+  return !target.closest('input, textarea, select, [contenteditable="true"]')
 }
 
 function createCopyButton(codeBlock: HTMLElement) {
@@ -237,13 +265,19 @@ async function renderFile(file: File) {
 
   try {
     const markdown = await file.text()
-    renderMarkdown(markdown)
-    fileName.textContent = file.name
-    fileMeta.textContent = `${formatBytes(file.size)} · Last modified ${new Intl.DateTimeFormat(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(file.lastModified)}`
-    setState('loaded', '.md or .markdown')
+    const snapshot: DocumentSnapshot = {
+      fileName: file.name,
+      fileMeta: `${formatBytes(file.size)} · Last modified ${new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }).format(file.lastModified)}`,
+      markdown,
+    }
+
+    applyDocumentSnapshot(snapshot, {
+      recordHistory: true,
+      stateMessage: '.md or .markdown',
+    })
   } catch {
     documentView.hidden = true
     output.innerHTML = ''
@@ -261,6 +295,79 @@ function renderMarkdown(markdown: string) {
   configureRenderedLinks(output)
   documentView.hidden = false
   updateBackToTopVisibility()
+}
+
+function pushHistory(snapshot: DocumentSnapshot | null) {
+  documentHistory.splice(historyIndex + 1)
+  documentHistory.push(snapshot)
+  historyIndex = documentHistory.length - 1
+}
+
+function applyDocumentSnapshot(
+  snapshot: DocumentSnapshot | null,
+  options: {
+    recordHistory: boolean
+    stateMessage: string
+  }
+) {
+  if (options.recordHistory) {
+    pushHistory(snapshot)
+  }
+
+  if (!snapshot) {
+    documentView.hidden = true
+    output.innerHTML = ''
+    fileName.textContent = ''
+    fileMeta.textContent = ''
+    updateBackToTopVisibility()
+    setState('empty', options.stateMessage)
+    return
+  }
+
+  renderMarkdown(snapshot.markdown)
+  fileName.textContent = snapshot.fileName
+  fileMeta.textContent = snapshot.fileMeta
+  setState('loaded', options.stateMessage)
+}
+
+function moveHistory(direction: 'undo' | 'redo') {
+  if (direction === 'undo') {
+    if (historyIndex === 0) return
+    historyIndex -= 1
+  } else {
+    if (historyIndex >= documentHistory.length - 1) return
+    historyIndex += 1
+  }
+
+  const snapshot = documentHistory[historyIndex]
+  const stateMessage =
+    direction === 'undo'
+      ? snapshot
+        ? 'History undo applied'
+        : 'History reverted to empty state'
+      : 'History redo applied'
+
+  applyDocumentSnapshot(snapshot, {
+    recordHistory: false,
+    stateMessage,
+  })
+}
+
+function clearCurrentDocument() {
+  if (documentHistory[historyIndex] === null) return
+
+  applyDocumentSnapshot(null, {
+    recordHistory: true,
+    stateMessage: 'Current markdown cleared',
+  })
+}
+
+function buildClipboardSnapshot(markdown: string): DocumentSnapshot {
+  return {
+    fileName: 'Pasted from clipboard',
+    fileMeta: `${formatBytes(new TextEncoder().encode(markdown).length)} · Pasted just now`,
+    markdown,
+  }
 }
 
 function extractFile(event: DragEvent) {
@@ -308,19 +415,39 @@ window.addEventListener('paste', (event) => {
 
   const markdown = clipboardData.getData('text/markdown') || clipboardData.getData('text/plain')
   if (!looksLikeMarkdown(markdown)) {
-    setState(documentView.hidden ? 'empty' : 'loaded', 'Clipboard content does not look like Markdown.')
+    setTransientErrorMessage('Clipboard content does not look like Markdown.')
     return
   }
 
   event.preventDefault()
-  renderMarkdown(markdown)
-  fileName.textContent = 'Pasted from clipboard'
-  fileMeta.textContent = `${formatBytes(new TextEncoder().encode(markdown).length)} · Pasted just now`
-  setState('loaded', 'Markdown pasted from clipboard')
+  applyDocumentSnapshot(buildClipboardSnapshot(markdown), {
+    recordHistory: true,
+    stateMessage: 'Markdown pasted from clipboard',
+  })
+})
+
+window.addEventListener('keydown', (event) => {
+  if (!canCaptureUndoShortcut(event.target)) return
+  if (!event.metaKey) return
+
+  if (event.key.toLowerCase() === 'z' && !event.shiftKey) {
+    event.preventDefault()
+    moveHistory('undo')
+    return
+  }
+
+  if (event.key.toLowerCase() === 'z' && event.shiftKey) {
+    event.preventDefault()
+    moveHistory('redo')
+  }
 })
 
 window.addEventListener('scroll', updateBackToTopVisibility, { passive: true })
 
 backToTopButton.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
+})
+
+clearDocumentButton.addEventListener('click', () => {
+  clearCurrentDocument()
 })
