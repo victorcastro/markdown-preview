@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 1.2 - 2026-05-24
+
+### Added
+
+- Open Graph and Twitter card metadata for richer link previews when sharing the public site.
+- `robots.txt` and `sitemap.xml` in `public/` for basic search engine discovery.
+- A dedicated PNG social preview asset for public sharing cards.
+
+### Changed
+
+- Expanded the document metadata in `index.html` with canonical, robots, keywords, and theme-color tags.
+
 ## 1.1 - 2026-05-24
 
 ### Added

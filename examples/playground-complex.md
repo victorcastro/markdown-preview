@@ -168,7 +168,7 @@ Enlace normal: [OpenAI](https://openai.com)
 
 Enlace autolink: <https://github.com/markedjs/marked>
 
-Enlace con titulo: [Proyecto](https://github.com/victorcastro/markdown-live "Repositorio markdown-preview")
+Enlace con titulo: [Proyecto](https://github.com/victorcastro/markdown-preview "Repositorio markdown-preview")
 
 Referencia reutilizable: [documentacion][docs] y [buscador][search].
 
