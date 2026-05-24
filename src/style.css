@@ -206,6 +206,10 @@ h1 {
   display: none;
 }
 
+.document-preview {
+  min-width: 0;
+}
+
 .document-header {
   display: flex;
   gap: 20px;
@@ -216,6 +220,7 @@ h1 {
 }
 
 .document {
+  min-width: 0;
   padding: clamp(22px, 4vw, 46px);
   background: var(--surface-strong);
   border: 1px solid var(--line);
@@ -291,6 +296,7 @@ h1 {
 }
 
 .markdown-body {
+  min-width: 0;
   color: #e8e2d8;
   font-size: clamp(1rem, 1.7vw, 1.12rem);
 }
@@ -361,6 +367,7 @@ h1 {
 }
 
 .markdown-body pre {
+  max-width: 100%;
   overflow: auto;
   padding: 18px;
   background: #070a0f;
@@ -370,10 +377,12 @@ h1 {
 
 .markdown-body pre code {
   display: block;
+  min-width: 0;
   padding: 0;
   color: #f6f0e5;
   background: transparent;
   border-radius: 0;
+  white-space: pre;
 }
 
 .markdown-body table {
