@@ -45,8 +45,8 @@
   --danger-soft: rgba(255, 138, 122, 0.12);
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
   --font-sans: 'Inter', 'Segoe UI', sans-serif;
-  --font-display: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', sans-serif;
-  --font-accent: 'Manrope', 'Inter', 'Segoe UI', sans-serif;
+  --font-display: 'Manrope', 'Inter', 'Segoe UI', sans-serif;
+  --font-accent: 'Inter', 'Segoe UI', sans-serif;
   --font-mono: JetBrains Mono, Fira Code, IBM Plex Mono, SFMono-Regular, Menlo, Consolas, monospace;
   --font-body: var(--font-mono);
   --font-ui: var(--font-accent);
@@ -283,10 +283,11 @@ h1 {
   font-family: var(--font-heading);
   margin: 0;
   overflow-wrap: anywhere;
-  color: rgba(244, 240, 232, 0.88);
-  font-size: clamp(1.2rem, 2.8vw, 1.8rem);
-  font-weight: 640;
-  letter-spacing: -0.045em;
+  color: rgba(244, 240, 232, 0.62);
+  font-size: clamp(1rem, 1.8vw, 1.28rem);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
 }
 
 .document-header p:last-child {
@@ -461,6 +462,61 @@ h1 {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   content: attr(data-language);
+}
+
+.markdown-body .code-copy-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 6px;
+  color: rgba(244, 240, 232, 0.72);
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.markdown-body .code-copy-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.markdown-body .code-copy-button:hover,
+.markdown-body .code-copy-button:focus-visible {
+  color: rgba(244, 240, 232, 0.96);
+  background: rgba(244, 240, 232, 0.08);
+}
+
+.markdown-body .code-copy-button:active {
+  transform: translateY(1px);
+}
+
+.markdown-body .code-copy-button[data-copied='true'] {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  color: #8bd8bd;
+  background: transparent;
+}
+
+.markdown-body .code-copy-button[data-copied='false'] {
+  color: #fff4f2;
+  background: rgba(255, 138, 122, 0.18);
+  border-color: rgba(255, 138, 122, 0.3);
 }
 
 .markdown-body pre code {

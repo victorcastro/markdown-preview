@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 1.3 - 2026-05-24
+
+### Added
+
+- Local font assets for `Space Grotesk`, `Inter`, and `Manrope`.
+- A dedicated code-heavy playground fixture in [examples/playground-code-heavy.md](/Users/vcastro/Workspace/VictorCastro/Projects/markdown-preview/examples/playground-code-heavy.md) for overflow and code block rendering checks.
+- Syntax highlighting for fenced code blocks using `markdown-it` and `highlight.js`.
+- Language labels on rendered code blocks.
+
+### Changed
+
+- Replaced `marked` with `markdown-it` as the Markdown parser.
+- Improved the Markdown UI typography with separate font roles for headings, UI chrome, body text, and code.
+- Prevented long code blocks from stretching the Markdown container, keeping horizontal scroll inside each code block.
+
 ## 1.2 - 2026-05-24
 
 ### Added
