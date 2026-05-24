@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## 1.4 - 2026-05-24
+
+### Added
+
+- Copy-to-clipboard control for rendered code blocks, including transient copied and failure states.
+- CI validation to ensure `CHANGELOG.md` contains an entry for the current `package.json` version.
+
+### Changed
+
+- Refined Markdown code block presentation with syntax highlighting, language badges, and a lighter copy affordance.
+- Reduced the visual prominence of the loaded filename in the document header.
+- Switched Markdown display typography to a cleaner title treatment using the local font set already bundled with the app.
 
 ## 1.3 - 2026-05-24
 
