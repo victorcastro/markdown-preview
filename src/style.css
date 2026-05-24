@@ -1,3 +1,35 @@
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk/space-grotesk-variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter/inter-variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter/inter-italic-variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope/manrope-variable.ttf') format('truetype');
+}
+
 :root {
   --bg: #080b10;
   --bg-deep: #111827;
@@ -12,12 +44,13 @@
   --danger: #ff8a7a;
   --danger-soft: rgba(255, 138, 122, 0.12);
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
-  --font: JetBrains Mono, Fira Code, IBM Plex Mono, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-body: JetBrains Mono, Fira Code, IBM Plex Mono, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-heading: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', sans-serif;
 
   color: var(--ink);
   background: var(--bg);
   color-scheme: dark;
-  font: 15px/1.7 var(--font);
+  font: 15px/1.7 var(--font-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -179,16 +212,18 @@ h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-heading);
   color: var(--ink);
-  line-height: 1.1;
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
 h1 {
   max-width: 680px;
   margin: 0;
   font-size: clamp(2.7rem, 8vw, 6.8rem);
-  font-weight: 760;
-  letter-spacing: -0.09em;
+  font-weight: 700;
+  letter-spacing: -0.075em;
 }
 
 .drop-hint h1 {
@@ -234,12 +269,13 @@ h1 {
 }
 
 .document-header h2 {
+  font-family: var(--font-heading);
   margin: 0;
   overflow-wrap: anywhere;
   color: rgba(244, 240, 232, 0.88);
   font-size: clamp(1.2rem, 2.8vw, 1.8rem);
-  font-weight: 680;
-  letter-spacing: -0.035em;
+  font-weight: 640;
+  letter-spacing: -0.045em;
 }
 
 .document-header p:last-child {
@@ -315,9 +351,12 @@ h1 {
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
+  font-family: var(--font-heading);
   margin: 1.35em 0 0.55em;
-  font-weight: 780;
-  letter-spacing: -0.035em;
+  font-weight: 680;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 
 .markdown-body h1 {
@@ -332,6 +371,12 @@ h1 {
 
 .markdown-body h3 {
   font-size: 1.35rem;
+}
+
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  letter-spacing: -0.025em;
 }
 
 .markdown-body p,
