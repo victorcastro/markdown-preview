@@ -166,13 +166,13 @@ console.log('hola')
 
 Enlace normal: [OpenAI](https://openai.com)
 
-Enlace autolink: <https://github.com/markedjs/marked>
+Enlace autolink: <https://github.com/markdown-it/markdown-it>
 
 Enlace con titulo: [Proyecto](https://github.com/victorcastro/markdown-preview "Repositorio markdown-preview")
 
 Referencia reutilizable: [documentacion][docs] y [buscador][search].
 
-[docs]: https://marked.js.org/
+[docs]: https://markdown-it.github.io/
 [search]: https://www.google.com/
 
 Imagen remota:
