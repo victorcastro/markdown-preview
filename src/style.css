@@ -437,38 +437,43 @@ h1 {
   border-radius: 6px;
 }
 
-.markdown-body pre {
-  position: relative;
-  max-width: 100%;
-  overflow: auto;
-  padding: 18px;
+.markdown-body .code-block {
+  overflow: hidden;
   background: #070a0f;
   border: 1px solid rgba(244, 240, 232, 0.08);
   border-radius: 16px;
 }
 
-.markdown-body pre[data-language] {
-  padding-top: 52px;
+.markdown-body .code-block-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 12px 14px 10px 18px;
+  background: transparent;
 }
 
-.markdown-body pre[data-language]::before {
-  position: absolute;
-  top: 14px;
-  left: 18px;
+.markdown-body .code-block-language {
   color: rgba(244, 240, 232, 0.42);
   font-family: var(--font-ui);
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  content: attr(data-language);
+}
+
+.markdown-body pre {
+  max-width: 100%;
+  margin: 0;
+  overflow: auto;
+  padding: 18px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
 .markdown-body .code-copy-button {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -506,9 +511,6 @@ h1 {
 }
 
 .markdown-body .code-copy-button[data-copied='true'] {
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
   color: #8bd8bd;
   background: transparent;
 }
@@ -516,7 +518,6 @@ h1 {
 .markdown-body .code-copy-button[data-copied='false'] {
   color: #fff4f2;
   background: rgba(255, 138, 122, 0.18);
-  border-color: rgba(255, 138, 122, 0.3);
 }
 
 .markdown-body pre code {

@@ -186,6 +186,18 @@ function createCopyButton(codeBlock: HTMLElement) {
   return button
 }
 
+function createCodeBlockHeader(language?: string) {
+  const header = document.createElement('div')
+  header.className = 'code-block-header'
+
+  const languageLabel = document.createElement('span')
+  languageLabel.className = 'code-block-language'
+  languageLabel.textContent = language ? language.toUpperCase() : 'CODE'
+  header.append(languageLabel)
+
+  return header
+}
+
 function decorateCodeBlocks(container: HTMLElement) {
   container.querySelectorAll<HTMLElement>('pre > code').forEach((codeBlock) => {
     const pre = codeBlock.parentElement
@@ -199,9 +211,18 @@ function decorateCodeBlocks(container: HTMLElement) {
       }
     }
 
-    if (!pre.querySelector('.code-copy-button')) {
-      pre.append(createCopyButton(codeBlock))
+    if (pre.parentElement?.classList.contains('code-block')) {
+      return
     }
+
+    const codeBlockContainer = document.createElement('div')
+    codeBlockContainer.className = 'code-block'
+
+    const header = createCodeBlockHeader(pre.dataset.language)
+    header.append(createCopyButton(codeBlock))
+
+    pre.replaceWith(codeBlockContainer)
+    codeBlockContainer.append(header, pre)
   })
 }
 
