@@ -204,6 +204,10 @@ a {
   display: none;
 }
 
+.shell[data-state='dragging'][data-has-document='true'] .drop-hint {
+  display: none;
+}
+
 .shell[data-state='error'] .drop-hint {
   color: rgba(255, 138, 122, 0.42);
 }
