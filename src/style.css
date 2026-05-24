@@ -244,6 +244,52 @@ h1 {
   font-size: 0.9rem;
 }
 
+.back-to-top {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 3;
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  padding: 8px 12px;
+  color: rgba(244, 240, 232, 0.52);
+  letter-spacing: 0.02em;
+  background: rgba(12, 17, 25, 0.42);
+  border: 1px solid rgba(244, 240, 232, 0.08);
+  border-radius: 999px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.back-to-top svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  color: rgba(244, 240, 232, 0.9);
+  background: rgba(12, 17, 25, 0.68);
+  border-color: rgba(244, 240, 232, 0.18);
+}
+
 .markdown-body {
   color: #e8e2d8;
   font-size: clamp(1rem, 1.7vw, 1.12rem);
@@ -385,5 +431,10 @@ h1 {
 
   .document-header p:last-child {
     margin-top: 10px;
+  }
+
+  .back-to-top {
+    right: 20px;
+    bottom: 20px;
   }
 }

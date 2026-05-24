@@ -41,6 +41,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <div class="markdown-body" data-output></div>
         </article>
       </section>
+
+      <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 5.5 5.75 11.75l1.5 1.5 3.7-3.7V18.5h2.1V9.55l3.7 3.7 1.5-1.5Z"
+          />
+        </svg>
+        Top
+      </button>
     </section>
   </main>
 `
@@ -52,6 +62,7 @@ const output = document.querySelector<HTMLElement>('[data-output]')!
 const documentView = document.querySelector<HTMLElement>('.document-preview')!
 const fileName = document.querySelector<HTMLElement>('[data-file-name]')!
 const fileMeta = document.querySelector<HTMLElement>('[data-file-meta]')!
+const backToTopButton = document.querySelector<HTMLButtonElement>('[data-back-to-top]')!
 
 let dragDepth = 0
 
@@ -117,10 +128,16 @@ function configureRenderedLinks(container: HTMLElement) {
   })
 }
 
+function updateBackToTopVisibility() {
+  const shouldShow = !documentView.hidden && window.scrollY > 320
+  backToTopButton.classList.toggle('is-visible', shouldShow)
+}
+
 async function renderFile(file: File) {
   if (!isMarkdownFile(file)) {
     documentView.hidden = true
     output.innerHTML = ''
+    updateBackToTopVisibility()
     setState('error', 'That file is not Markdown. Please use a .md or .markdown file.')
     return
   }
@@ -138,10 +155,12 @@ async function renderFile(file: File) {
       timeStyle: 'short',
     }).format(file.lastModified)}`
     documentView.hidden = false
+    updateBackToTopVisibility()
     setState('loaded', '.md or .markdown')
   } catch {
     documentView.hidden = true
     output.innerHTML = ''
+    updateBackToTopVisibility()
     setState('error', 'The file could not be read. Try another Markdown file.')
   }
 }
@@ -183,4 +202,10 @@ window.addEventListener('drop', (event) => {
   }
 
   void renderFile(file)
+})
+
+window.addEventListener('scroll', updateBackToTopVisibility, { passive: true })
+
+backToTopButton.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
