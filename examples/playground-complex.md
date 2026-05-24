@@ -10,7 +10,7 @@ version: 1
 
 # Playground Markdown Complejo
 
-Archivo de prueba pensado para arrastrar en `markdown-live` y comprobar:
+Archivo de prueba pensado para arrastrar en `markdown-preview` y comprobar:
 
 - Tipografias y jerarquia visual.
 - Listas simples, mixtas y anidadas.
@@ -127,7 +127,7 @@ npm run build
 
 ```json
 {
-  "name": "markdown-live",
+  "name": "markdown-preview",
   "private": true,
   "features": ["drag-drop", "gfm", "sanitized-html"]
 }
@@ -168,7 +168,7 @@ Enlace normal: [OpenAI](https://openai.com)
 
 Enlace autolink: <https://github.com/markedjs/marked>
 
-Enlace con titulo: [Proyecto](https://github.com/victorcastro/markdown-live "Repositorio markdown-live")
+Enlace con titulo: [Proyecto](https://github.com/victorcastro/markdown-live "Repositorio markdown-preview")
 
 Referencia reutilizable: [documentacion][docs] y [buscador][search].
 
@@ -183,7 +183,7 @@ Imagen con referencia:
 
 ![Logo de ejemplo][img-ref]
 
-[img-ref]: https://dummyimage.com/640x220/111827/e8e2d8.png&text=markdown-live+preview
+[img-ref]: https://dummyimage.com/640x220/111827/e8e2d8.png&text=markdown-preview
 
 ## HTML embebido
 
